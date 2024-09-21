@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useMemo } from "react";
 import { CardComponent } from "./CardComponent";
-import Cartpage from "./Cartpage";
+import {Link} from "react-router-dom"
 
 const Homepage = () => {
   const [products, setProducts] = useState([]);
   const [cartProducts, setCartProducts] = useState([]);
+  const memoizedCartProducts = useMemo(() => cartProducts, [cartProducts]);
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -23,9 +24,10 @@ const Homepage = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold underline">Hello world</h1>
-      {/* Pass products and the cart handler function */}
+      <Link to="/cartpage" state={{ cartProducts:memoizedCartProducts }}>
+        My Cart
+      </Link>
       <CardComponent products={products} onAddToCart={handleAddToCart} />
-      <Cartpage cartProducts={cartProducts}/>
     </div>
   );
 };
